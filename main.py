@@ -1,10 +1,6 @@
 import streamlit as st
 from rag import answer_question
 
-#temporary import
-from rag import get_db_connection
-test = get_db_connection()
-
 st.set_page_config(
     page_title="Guyana Constitution NL Query",
     page_icon="📄",

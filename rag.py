@@ -17,8 +17,6 @@ def get_db_connection():
         read_only=False
     )
     cursor = conn.cursor()
-    print(cursor.execute("SELECT embeddings_hash, hit_count FROM answers").fetchall())
-    print(cursor.execute("DESCRIBE answers").fetchall())
     return cursor
 
 # If question doesn't exist add it
