@@ -49,7 +49,7 @@ for msg in st.session_state.messages:
                         )
 
 question = st.chat_input(
-    "Ask a question..."
+    "Ask a question about the Guyana Constitution."
 )
 
 if question:
