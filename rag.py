@@ -73,7 +73,7 @@ def _check_for_answer(question_embeddings: list,
                              LIMIT 1
                              """, [question_embeddings]).fetchall()
     
-    print(type(old_answer[0]), len(old_answer[0]))
+    
     # Only happens first time
     if not(old_answer):
         return []
