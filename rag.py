@@ -86,7 +86,7 @@ def _check_for_answer(question_embeddings: list,
 def test_db():
     cursor = get_db_connection()
     test = cursor.execute("""
-    show tables;
+    describe sections;
     """).fetchall()
     return test
 
@@ -109,6 +109,8 @@ def retrieve_chunks(question: str):
                                        SELECT
                                        id,
                                        text,
+                                       page_number,
+                                       sector_name,
                                        array_cosine_similarity(embeddings, ?::FLOAT[1536]) AS score
                                        FROM sections
                                        ORDER BY score DESC
@@ -118,13 +120,17 @@ def retrieve_chunks(question: str):
     return (results, question_embeddings, False)
 
 def build_context(results: list):
+    for index, row in enumerate(results):
+        print(index,": ", row)
+        print(type(row))
+        print("--------------------------------")
     
     context = "\n\n".join(
-        [
-            f"Source {i+1}:\n{row[1]}"
-            for i, row in enumerate(results)
-            ]
-            )
+            [
+                f"Source {i+1}: Page: {row[2]}, Section: {row[3]}\n Text:\n{row[1]}"
+                for i, row in enumerate(results)
+                ]
+                )
     
     return context
 
@@ -139,7 +145,7 @@ say that the information is not available.
 Do not invent facts.
 Do not use outside knowledge.
 
-When possible, cite the source numbers.
+When possible, cite the source page numbers and sections.
 """
 
 def generate_answer(question:str, context: str):
@@ -174,8 +180,8 @@ def answer_question(question: str):
     res_exist = results_res_exist[2]
     
     if not(res_exist):
-        best_score = results[0][2]
-        if best_score < 0.45:
+        best_score = results[0][4]
+        if best_score < 0.40:
             return {
                 "answer": "I couldn't find relevant information in the document",
                 "sources": [],

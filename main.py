@@ -45,8 +45,8 @@ for msg in st.session_state.messages:
                             #source[2]
                         )
 
-test = test_db()
-st.write("Test ", test)
+#test = test_db()
+#st.write("Test ", test)
 question = st.chat_input(
     "Ask a question about the Guyana Constitution."
 )
