@@ -1,5 +1,6 @@
 import streamlit as st
 from rag import answer_question
+from rag import test_db
 
 st.set_page_config(
     page_title="Guyana Constitution NL Query",
@@ -44,6 +45,8 @@ for msg in st.session_state.messages:
                             #source[2]
                         )
 
+test = test_db()
+st.write("Test ", test)
 question = st.chat_input(
     "Ask a question about the Guyana Constitution."
 )

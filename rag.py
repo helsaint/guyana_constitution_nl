@@ -4,8 +4,10 @@ import hashlib
 
 from config import (
     client,
+    client_d,
     db_url,
     OPENAI_MODEL,
+    DEEPSEEK_MODEL,
     EMBEDDING_MODEL,
     TOP_K_CHUNKS,
 )
@@ -73,7 +75,6 @@ def _check_for_answer(question_embeddings: list,
                              LIMIT 1
                              """, [question_embeddings]).fetchall()
     
-    
     # Only happens first time
     if not(old_answer):
         return []
@@ -81,6 +82,13 @@ def _check_for_answer(question_embeddings: list,
         return [old_answer[0][2], old_answer[0][4], old_answer[0][5]] 
     else:
         return []
+
+def test_db():
+    cursor = get_db_connection()
+    test = cursor.execute("""
+    show tables;
+    """).fetchall()
+    return test
 
 def embed(text: str) -> list[float]:
     res = client.embeddings.create(
@@ -142,8 +150,9 @@ def generate_answer(question:str, context: str):
     {context}
     """
 
-    response = client.chat.completions.create(
-        model=OPENAI_MODEL,
+    response = client_d.chat.completions.create(
+        #model=OPENAI_MODEL,
+        model=DEEPSEEK_MODEL,
         messages=[
             {
                 "role": "system",
