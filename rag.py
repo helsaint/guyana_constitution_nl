@@ -86,7 +86,7 @@ def _check_for_answer(question_embeddings: list,
 def test_db():
     cursor = get_db_connection()
     test = cursor.execute("""
-    describe sections;
+    select count(*) from answers;
     """).fetchall()
     return test
 
@@ -127,7 +127,7 @@ def build_context(results: list):
     
     context = "\n\n".join(
             [
-                f"Source {i+1}: Page: {row[2]}, Section: {row[3]}\n Text:\n{row[1]}"
+                f"Source {i+1}: Page: {row[2]}, Section: {row[3]}\n Text: \n{row[1]}"
                 for i, row in enumerate(results)
                 ]
                 )
